@@ -1,0 +1,68 @@
+.professional-skills-matrix, .professional-skills-matrix * {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+    font-size: medium;
+
+    &:not(p):not(span):not(i) {
+        background: rgba(255,255,255,0.1)
+    }
+
+    p,span {
+        padding: 5px;
+    }
+}
+
+.professional-skills-matrix {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(auto, 1fr);
+    gap: 0;
+
+    >.column-headers {
+        grid-column: span 5;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        grid-template-rows: repeat(auto, 1fr);
+        >span {
+            background: rgba(255,255,255,0.4);
+            border-left: 1px solid rgba(0,0,0,0);
+        }
+    }
+
+    >.competency-item {
+        grid-column: span 5;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        grid-template-rows: repeat(auto, 1fr);
+        >.competency-name {
+            grid-row: 1 / 10000;
+            writing-mode: sideways-lr;
+            text-align: center;
+        }
+        &:not(:last-child) {
+            border-bottom: 1px solid black;
+        }
+        >.essex-graduate-item {
+            grid-column: 2 / span 4;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            border-left: 1px solid black;
+            &:not(:last-child) {
+                border-bottom: 1px solid black;
+            }
+            >.essex-graduate-name {
+                grid-row: 1 / 10000;
+            }
+            >.skill-item {
+                grid-column: 2 / span 4;
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                border-left: 1px solid black;
+                &:not(:last-child) {
+                    border-bottom: 1px solid black;
+                }
+            }
+        }
+    }
+}
