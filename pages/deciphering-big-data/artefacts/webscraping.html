@@ -1,0 +1,204 @@
+<!DOCTYPE HTML>
+<!--
+	Forty by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>B. Jones Portfolio</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../../../assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="../../../assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="../../../index.html" class="logo"><strong>B. Jones</strong> <span>e-Portfolio</span></a>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<ul class="links">
+							<li><a href="../../../index.html">Home</a></li>
+							<li><a href="./module.html">Module</a></li>
+						</ul>
+						<ul class="actions stacked">
+							<!--
+							<li><a href="#" class="button primary fit">Get Started</a></li>
+							<li><a href="#" class="button fit">Log In</a></li>
+							-->
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main" class="alt">
+
+						<!-- One -->
+							<section id="one">
+								<div class="inner">
+									<header class="major">
+										<h1>Web Scraping</h1>
+									</header>
+									<p>For unit 3, we were tasked with a web scraping activity focused on the word “Data Scientist”. For this, I chose to perform a targeted web scraping of a data science report from Stitch Data’s website.
+</p>
+									<h5>Here is how it works:</h5>
+									<h5>Data extraction:</h5>
+									<p>
+									My script makes an HTTP GET request to retrieve the webpage content, then used BeautifulSoup to parse the HTML. It targets two types of content containers:
+									<ol>
+										<li>Key Findings Extraction. The code searches for ‘div; elements with the class ‘key-findings-box-. For each finding box, it extracts two paragraph elements – the first containing the title and the second containing descriptive information. These are stored as dictionaries with ‘title’ and ‘info’ keys.</li>
+										<li>Statistics extraction. Similarly, it locates ‘div’ elements with the class ‘stats-box’ and extracts statistical data. The script pulls the numeric value from ‘h3’ tags and the description from ‘p’ tags. It includes logic to handle formatting, converting ‘k’ suffices to thousands and processing decimal values appropriately. </li>
+									</ol>
+									<h5>Data processing features:</h5>
+									<ul>
+										<li>Text cleaning: it uses ‘.get_text()’ to extract clean text content from HTML elements. </li>
+										<li>Numeric conversion: transforms string values like “15k” into proper numeric format (15000).</li>
+										<li>Structured storage: organised extracted data into a structured format with findings as a list of dictionaries and statistics as a single dictionary.</li>
+									</ul>
+									<h5>Output generation:</h5>
+									<p>The processed data is compiled into a JSON structure containing both findings and statistics, then written to a file called “scraping_output.json”</p>
+								</p>
+									<h5>Key Strengths:</h5>
+									My implementation demonstrated good practices by using specific CSS selectors to target exact content areas rather than scraping entire pages. The numeric processing logic handles common web formatting conventions, and the structured output format makes the data easily accessible for further analysis.
+									This approach is particularly effective for extracting structured insights from data science industry reports, creating a reusable dataset for analysis or research purposes.
+
+									<h6>Code:</h6>
+									<pre><code>
+import requests
+import json
+from bs4 import BeautifulSoup
+target_url = 'https://www.stitchdata.com/resources/the-state-of-data-science/'
+
+# Make GET request to page, grab content, store in page_contents
+page_contents = requests.get(target_url).content
+
+# Initialise beautiful soup with the contents
+soup = BeautifulSoup(page_contents, features="html.parser")
+
+# Selector on page contents to find content
+findings_boxes = soup.find_all('div', 'key-findings-box')
+
+compiled_findings = []
+
+# For each section of content, extract the title and info and store in the compiled_findings list as a dict
+for finding_box in findings_boxes:
+    [title, info] = finding_box.find_all('p')
+    compiled_findings.append({'title': title.get_text(), 'info': info.get_text()})
+
+# Selector on page to find statistics
+stats_boxes = soup.find_all('div', 'stats-box')
+
+# Initialise dict
+compiled_stats = {}
+
+# for each stat box, extract title and value, convert to a float and store.
+for stats_box in stats_boxes:
+    [value] = stats_box.find_all('h3')
+    [title] = stats_box.find_all('p')
+    numeric_value = value.get_text().replace('k', '000')
+    if ('.' in numeric_value):
+        numeric_value = float(numeric_value) * 1000
+    else:
+        numeric_value = float(numeric_value)
+    compiled_stats[title.get_text()] = numeric_value
+
+# Output to file
+with open("scraping_output.json", "w") as f:
+  f.write(json.dumps({ 'findings': compiled_findings, 'stats': compiled_stats }))
+									</code></pre>
+								</div>
+							</section>
+
+					</div>
+
+				<!-- Contact -->
+					<!--<section id="contact">
+						<div class="inner">
+							<section>
+								<form method="post" action="#">
+									<div class="fields">
+										<div class="field half">
+											<label for="name">Name</label>
+											<input type="text" name="name" id="name" />
+										</div>
+										<div class="field half">
+											<label for="email">Email</label>
+											<input type="text" name="email" id="email" />
+										</div>
+										<div class="field">
+											<label for="message">Message</label>
+											<textarea name="message" id="message" rows="6"></textarea>
+										</div>
+									</div>
+									<ul class="actions">
+										<li><input type="submit" value="Send Message" class="primary" /></li>
+										<li><input type="reset" value="Clear" /></li>
+									</ul>
+								</form>
+							</section>
+							<section class="split">
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-envelope"></span>
+										<h3>Email</h3>
+										<a href="#">information@untitled.tld</a>
+									</div>
+								</section>
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-phone"></span>
+										<h3>Phone</h3>
+										<span>(000) 000-0000 x12387</span>
+									</div>
+								</section>
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-home"></span>
+										<h3>Address</h3>
+										<span>1234 Somewhere Road #5432<br />
+										Nashville, TN 00000<br />
+										United States of America</span>
+									</div>
+								</section>
+							</section>
+						</div>
+					</section>-->
+
+				<!-- Footer -->
+				<footer id="footer">
+					<div class="inner">
+						<ul class="icons">
+							<!--<li><a href="#" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
+							<li><a href="#" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
+							<li><a href="#" class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>-->
+							<li><a href="#" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+							<!--<li><a href="#" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>-->
+						</ul>
+						<ul class="copyright">
+							<li>&copy; Rebecca Jones</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li>
+						</ul>
+					</div>
+				</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="../../assets/js/jquery.min.js"></script>
+			<script src="../../assets/js/jquery.scrolly.min.js"></script>
+			<script src="../../assets/js/jquery.scrollex.min.js"></script>
+			<script src="../../assets/js/browser.min.js"></script>
+			<script src="../../assets/js/breakpoints.min.js"></script>
+			<script src="../../assets/js/util.js"></script>
+			<script src="../../assets/js/main.js"></script>
+
+	</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE HTML>
+<!--
+	Forty by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>B. Jones Portfolio</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../../../assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="../../../assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="../../../index.html" class="logo"><strong>B. Jones</strong> <span>e-Portfolio</span></a>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<ul class="links">
+							<li><a href="../../../index.html">Home</a></li>
+							<li><a href="./module.html">Module</a></li>
+						</ul>
+						<ul class="actions stacked">
+							<!--
+							<li><a href="#" class="button primary fit">Get Started</a></li>
+							<li><a href="#" class="button fit">Log In</a></li>
+							-->
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main" class="alt">
+
+						<!-- One -->
+							<section id="one">
+								<div class="inner">
+									<header class="major">
+										<h1>API Security Requirements</h1>
+									</header>
+									<h4>OpenWeatherMap API Security Requirements Specification</h4>
+									<h4>Secure Weather Data Integration for Python Applications</h4>
+									<ol>
+										<li>Overview and Purpose
+											<ul>
+												<li>This document outlines the security requirements for integrating the OpenWeatherMap API with Python applications, enabling secure weather data sharing across JSON and XML formats with SQL database storage. OpenWeatherMap provides weather forecasting through REST API endpoints requiring API key authentication (OpenWeatherMap, 2024). The system must handle weather data collection, real-time connectivity, and secure storage while protecting against unauthorised access, following established API security frameworks (OWASP Foundation, 2023).
+									</li>
+											</ul>
+										</li>
+										<li>Key Security Risks
+											<ul>
+												<li>Several critical threats affect OpenWeatherMap API integration. API key exposure represents the primary risk, where leaked credentials enable unauthorised usage, leading to service suspension or unexpected charges (Salt Security, 2023). Rate limit violations pose significant threats, as exceeding usage quotas can result in service blocking and account termination. Data injection risks occur when processing weather responses and storing information in SQL databases without proper sanitisation (OWASP Foundation, 2021). Man-in-the-middle attacks could intercept weather data during transmission, potentially allowing the delivery of false weather information (Cloudflare, 2024). Credential theft through insecure API key storage in Python applications creates ongoing vulnerabilities.
+									</li>
+											</ul>
+										</li>
+										<li>Authentication and API Key Management
+											<ul>
+												<li>OpenWeatherMap requires API key authentication for all requests, making secure key management critical (OpenWeatherMap, 2024). API keys must be stored using environment variables or secure configuration systems; they should never be hardcoded in Python scripts or committed to repositories (GitHub, 2023). Key rotation should occur every 90 days with automated systems tracking usage patterns to detect unauthorised access. Multiple keys should be used to separate development, testing, and production environments to limit exposure in the event of a compromise. Applications must implement secure key retrieval mechanisms that decrypt keys only when needed and immediately clear them from memory after use (NIST, 2022).
+									</li>
+											</ul>
+										</li>
+										<li>Data Protection and Validation
+											<ul>
+												<li>All weather data received requires validation before being processed or stored. JSON responses need schema validation to ensure data integrity and prevent injection attacks when storing in databases (OWASP Foundation, 2021). XML format responses require validation against predefined schemas to detect malformed or malicious content. SQL database storage must exclusively use parameterised queries to prevent injection attacks (Microsoft, 2023). Data encryption using industry-standard algorithms protects stored weather information, particularly location-specific data revealing user patterns. Weather metrics should be validated to ensure reasonable ranges, allowing for the detection of corrupted or manipulated data.
+									</li>
+											</ul>
+										</li>
+										<li>Rate Limiting and Usage Controls
+											<ul>
+												<li>OpenWeatherMap enforces strict rate limits, which vary by subscription tier, making usage management essential. Python applications must implement client-side rate limiting to prevent exceeding quotas and use exponential backoff algorithms when approaching limits. Request caching should store weather data for appropriate periods based on forecast accuracy and update frequency, ensuring timely updates. Usage monitoring systems must track API consumption patterns and provide alerts when approaching monthly or daily limits. Applications should implement graceful degradation using cached data when rate limits are reached.
+									</li>
+											</ul>
+										</li>
+										<li>Network Security and Monitoring
+											<ul>
+												<li>All communications must use HTTPS connections with proper certificate validation to prevent man-in-the-middle attacks (Mozilla Foundation, 2023). Python applications should implement connection timeouts and retry logic to handle network failures securely and efficiently. Detailed logging must capture API interactions, including timestamps, response codes, and data volumes, while avoiding the logging of sensitive information, such as API keys (SANS Institute, 2024). Real-time monitoring should detect unusual request patterns, failed authentication attempts, and potential security breaches.
+									</li>
+											</ul>
+										</li>
+										<li>Conclusion
+											<ul>
+												<li>These security requirements ensure the safe integration of the OpenWeatherMap API while enabling legitimate access to weather data across multiple formats. Proper API key management prevents unauthorised usage, validation protects against data corruption, and rate limiting ensures service availability. This comprehensive approach supports secure data wrangling for weather data in Python applications while maintaining compliance with OpenWeatherMap's service requirements.
+</li>
+											</ul>
+										</li>
+									</ol>
+									
+									<h4>References</h4>
+									<ul>
+										<li>Cloudflare (2024) What is a man-in-the-middle attack? Available at: https://www.cloudflare.com/learning/security/threats/man-in-the-middle-attack/ </li>
+										<li>GitHub (2023) Managing secrets in GitHub repositories. Available at: https://docs.github.com/en/codespaces/managing-your-codespaces/managing-secrets-for-your-codespaces </li>
+										<li>Microsoft (2023) SQL injection prevention. Available at: https://docs.microsoft.com/en-us/sql/relational-databases/security/sql-injection </li>
+										<li>Mozilla Foundation (2023) Transport Layer Security (TLS). Available at: https://developer.mozilla.org/en-US/docs/Web/Security/Transport_Layer_Security </li>
+										<li>NIST (2022) Cybersecurity framework 1.1. Gaithersburg: National Institute of Standards and Technology.</li>
+										<li>OpenWeatherMap (2024) API documentation. Available at: https://openweathermap.org/api </li>
+										<li>OWASP Foundation (2021) Injection prevention cheat sheet. Available at: https://cheatsheetseries.owasp.org/cheatsheets/Injection_Prevention_Cheat_Sheet.html </li>
+										<li>OWASP Foundation (2023) API security top 10. Available at: https://owasp.org/www-project-api-security/</li>
+										<li>Salt Security (2023) State of API security report. Available at: https://salt.security/api-security-trends</li>
+										<li>SANS Institute (2024) Security logging and monitoring. Available at: https://www.sans.org/white-papers/logging-monitoring/</li>
+									</ul>
+									
+
+
+								</div>
+							</section>
+
+					</div>
+
+				<!-- Contact -->
+					<!--<section id="contact">
+						<div class="inner">
+							<section>
+								<form method="post" action="#">
+									<div class="fields">
+										<div class="field half">
+											<label for="name">Name</label>
+											<input type="text" name="name" id="name" />
+										</div>
+										<div class="field half">
+											<label for="email">Email</label>
+											<input type="text" name="email" id="email" />
+										</div>
+										<div class="field">
+											<label for="message">Message</label>
+											<textarea name="message" id="message" rows="6"></textarea>
+										</div>
+									</div>
+									<ul class="actions">
+										<li><input type="submit" value="Send Message" class="primary" /></li>
+										<li><input type="reset" value="Clear" /></li>
+									</ul>
+								</form>
+							</section>
+							<section class="split">
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-envelope"></span>
+										<h3>Email</h3>
+										<a href="#">information@untitled.tld</a>
+									</div>
+								</section>
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-phone"></span>
+										<h3>Phone</h3>
+										<span>(000) 000-0000 x12387</span>
+									</div>
+								</section>
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-home"></span>
+										<h3>Address</h3>
+										<span>1234 Somewhere Road #5432<br />
+										Nashville, TN 00000<br />
+										United States of America</span>
+									</div>
+								</section>
+							</section>
+						</div>
+					</section>-->
+
+				<!-- Footer -->
+				<footer id="footer">
+					<div class="inner">
+						<ul class="icons">
+							<!--<li><a href="#" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
+							<li><a href="#" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
+							<li><a href="#" class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>-->
+							<li><a href="#" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+							<!--<li><a href="#" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>-->
+						</ul>
+						<ul class="copyright">
+							<li>&copy; Rebecca Jones</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li>
+						</ul>
+					</div>
+				</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="../../assets/js/jquery.min.js"></script>
+			<script src="../../assets/js/jquery.scrolly.min.js"></script>
+			<script src="../../assets/js/jquery.scrollex.min.js"></script>
+			<script src="../../assets/js/browser.min.js"></script>
+			<script src="../../assets/js/breakpoints.min.js"></script>
+			<script src="../../assets/js/util.js"></script>
+			<script src="../../assets/js/main.js"></script>
+
+	</body>
+</html>

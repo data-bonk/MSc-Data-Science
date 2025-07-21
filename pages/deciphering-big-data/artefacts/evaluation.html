@@ -1,0 +1,144 @@
+<!DOCTYPE HTML>
+<!--
+	Forty by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>B. Jones Portfolio</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../../../assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="../../../assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="../../../index.html" class="logo"><strong>B. Jones</strong> <span>e-Portfolio</span></a>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<ul class="links">
+							<li><a href="../../../index.html">Home</a></li>
+							<li><a href="./module.html">Module</a></li>
+						</ul>
+						<ul class="actions stacked">
+							<!--
+							<li><a href="#" class="button primary fit">Get Started</a></li>
+							<li><a href="#" class="button fit">Log In</a></li>
+							-->
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main" class="alt">
+
+						<!-- One -->
+							<section id="one">
+								<div class="inner">
+									<header class="major">
+										<h1>Unit 6 vs. Unit 11 Evaluation</h1>
+									</header>
+									<p>Reflecting on the journey from my Unit 6 design proposal to the final Executive Summary submitted for Unit 11, there is a clear progression in both the technical maturity of my work and the depth of critical analysis. The feedback across both units highlights this development, from a solid foundation with room for deeper justification, to a more refined and distinguished final report.</p>
+									<p>In Unit 6, my project laid out the initial structure of a relational database for ADR Logistics, based on a well-organised Kaggle dataset. I identified key entities and mapped out their relationships using standard SQL data types. The feedback acknowledged the overall structure, referencing quality, and accuracy of the proposed design. However, it also indicated a lack of critical discussion, particularly around the selection and justification of tools such as PostgreSQL and data processing libraries like Pandas. This was a turning point. I realised that beyond technical correctness, I needed to defend design decisions with evidence, consider alternatives, and contextualise my choices within the broader landscape of database systems.</p>
+									<p>This learning informed the development of the Executive Summary. I retained the core schema from Unit 6 but made significant refinements through normalisation to 3NF, the introduction of constraints, lookup tables, and indexing to improve performance and consistency. Importantly, I addressed the gap in the previous report by adding a dedicated section on DBMS selection. Here, I compared SQL and NoSQL options across multiple criteria, including data structure, reliability, scalability, and integration potential, explaining why PostgreSQL was the most appropriate for structured fleet maintenance data. I also expanded on compliance, referencing GDPR and ISO standards, and included technical details on how PostgreSQL supports secure and auditable data storage.</p>
+									<p>One significant learning outcome was appreciating the value of iterative improvement. The revised implementation stage of the Executive Summary demonstrates how design must evolve through testing and feedback. My early use of free-text fields, for example, led to inconsistencies, something the feedback helped me identify. In response, I introduced lookup tables and check constraints to ensure data integrity. Similarly, the original schema lacked provisions for historical tracking, which I corrected by adding timestamped fields, such as Recorded_At and Installed_On.</p>
+									<p>The language and structure of the Executive Summary also reflect growth. Whereas the Unit 6 report was factual and descriptive, the Unit 11 report integrated more technical explanations and critical reflection. I took care to present complex ideas, such as ACID compliance or CAP theorem trade-offs, in accessible terms without oversimplification. This was noted positively in the Unit 11 feedback and contributed to the significantly higher mark.</p>
+									<p>Ultimately, the feedback-driven refinement from Unit 6 to Unit 11 deepened my understanding of relational database design, compliance, and the role of justification in technical writing. I’ve gained confidence in not only producing technically sound artefacts but also in evaluating and communicating the reasoning behind my choices. This will be invaluable for future data-driven projects where critical thinking and scalability are key.</p>
+
+								</div>
+							</section>
+
+					</div>
+
+				<!-- Contact -->
+					<!--<section id="contact">
+						<div class="inner">
+							<section>
+								<form method="post" action="#">
+									<div class="fields">
+										<div class="field half">
+											<label for="name">Name</label>
+											<input type="text" name="name" id="name" />
+										</div>
+										<div class="field half">
+											<label for="email">Email</label>
+											<input type="text" name="email" id="email" />
+										</div>
+										<div class="field">
+											<label for="message">Message</label>
+											<textarea name="message" id="message" rows="6"></textarea>
+										</div>
+									</div>
+									<ul class="actions">
+										<li><input type="submit" value="Send Message" class="primary" /></li>
+										<li><input type="reset" value="Clear" /></li>
+									</ul>
+								</form>
+							</section>
+							<section class="split">
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-envelope"></span>
+										<h3>Email</h3>
+										<a href="#">information@untitled.tld</a>
+									</div>
+								</section>
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-phone"></span>
+										<h3>Phone</h3>
+										<span>(000) 000-0000 x12387</span>
+									</div>
+								</section>
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-home"></span>
+										<h3>Address</h3>
+										<span>1234 Somewhere Road #5432<br />
+										Nashville, TN 00000<br />
+										United States of America</span>
+									</div>
+								</section>
+							</section>
+						</div>
+					</section>-->
+
+				<!-- Footer -->
+				<footer id="footer">
+					<div class="inner">
+						<ul class="icons">
+							<!--<li><a href="#" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
+							<li><a href="#" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
+							<li><a href="#" class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>-->
+							<li><a href="#" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+							<!--<li><a href="#" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>-->
+						</ul>
+						<ul class="copyright">
+							<li>&copy; Rebecca Jones</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li>
+						</ul>
+					</div>
+				</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="../../assets/js/jquery.min.js"></script>
+			<script src="../../assets/js/jquery.scrolly.min.js"></script>
+			<script src="../../assets/js/jquery.scrollex.min.js"></script>
+			<script src="../../assets/js/browser.min.js"></script>
+			<script src="../../assets/js/breakpoints.min.js"></script>
+			<script src="../../assets/js/util.js"></script>
+			<script src="../../assets/js/main.js"></script>
+
+	</body>
+</html>

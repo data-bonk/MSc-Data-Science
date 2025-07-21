@@ -1,0 +1,373 @@
+<!DOCTYPE HTML>
+<!--
+	Forty by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>B. Jones Portfolio</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../../../assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="../../../assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="../../../index.html" class="logo"><strong>B. Jones</strong> <span>e-Portfolio</span></a>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<ul class="links">
+							<li><a href="../../../index.html">Home</a></li>
+							<li><a href="./module.html">Module</a></li>
+						</ul>
+						<ul class="actions stacked">
+							<!--
+							<li><a href="#" class="button primary fit">Get Started</a></li>
+							<li><a href="#" class="button fit">Log In</a></li>
+							-->
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main" class="alt">
+
+						<!-- One -->
+							<section id="one">
+								<div class="inner">
+									<header class="major">
+										<h1>Normalisation</h1>
+									</header>
+									<p>Initially, I produced a script that created a final normalised database structure (already in 3NF), which defined three separate tables: ‘student’, ‘course’, and ‘exam’. It established proper foreign key relationships and inserted sample data directly into the normalised structure. The ‘normaliser.py’ script executed the DDL script to create the final normalised database, performed a sample JOIN query to demonstrate the relational structure, and then cleaned up by removing the database file. Upon review, I realised this was not what I was meant to do. 
+									</p><p>The task required me to demonstrate each step of the process, showing 1NF, 2NF, and 3NF, and build a relational database system with linked tables to illustrate my understanding of primary and secondary keys. So, I restarted, using my initial attempt as a base.
+									</p><p>My improved implementation successfully demonstrated each step of the database normalisation process from unnormalized CSV data through to 3NF.
+									Here’s how it does so:</p>
+									
+									<ol>
+										<li>Data Loading and Preparation
+											<ul>
+												<li>The script begins by reading the unnormalized ‘table.csv’ file, handling UTF-8 encoding and trimming whitespace from column headers. It displays the original data structure showing the problematic format with empty cells and repeating groups.
+</li>
+											</ul>
+										</li>
+										<li>First Normal Form (1NF) transformation
+											<ul>
+												<li>Problem addressed: The original data violates 1NF because it contains repeating groups (multiple courses per student) and incomplete rows.</li>
+												<li>My script uses an “active row” approach to fill in missing student information:
+													<ul>
+														<li>When it encounters a row with student data, it stores this at the ‘active_row’</li>
+														<li>For subsequent rows with only course information, it copies the student details from the active row.</li>
+														<li>Sets exam scores to ‘None’ for course-only rows (since students haven’t taken all courses)</li>
+														<li>Converts numeric fields to proper data types.</li>
+													</ul>
+												</li>
+												<li>This creates atomic rows where each row represents a single student-course relationship.</li>
+											</ul>
+										</li>
+										<li>Second Normal Form (2NF) transformation
+											<ul>
+												<li>Problem addressed: After 1NF, partial dependencies exist where non-key attributes depend on only part of a composite key.</li>
+												<li>My script separates data into these logical groups:
+													<ul>
+														<li>Student details: Information that depends only on Student Number (name, support status, date of birth)</li>
+														<li>Course details: Information that depends only on Course Name (exam boards, teacher names)</li>
+														<li>Exam results: Information that depends on both Student Number and Course Name (scores)</li>
+													</ul>
+												</li>
+												<li>The script utilises dictionaries with unique keys to eliminate duplicates, and then converts them to lists for display.</li>
+											</ul>
+										</li>
+										<li>Third Normal Form (3NF) assessment
+											<ul>
+												<li>In my script, I have identified that no further normalisation is required, as there are no transitive dependencies in the 2NF structure. Each non-key attribute depends directly on its table's primary key. A 3NF structure was demonstrated in my initial attempt.</li>
+											</ul>
+										</li>
+										<li>Database Implementation
+											<ul>
+												<li>For schema creation, DDL.sql was used to create the normalised database structure with proper foreign key relationships.</li>
+												<li>Data loading process
+													<ul>
+														<li>‘Courses’: Inserts course data and captures auto-generated IDs in a mapping dictionary.</li>
+														<li>‘Students’: Converts support status from text (“Yes”/“No”) to binary (1/0) for proper database storage.</li>
+														<li>‘Exams’: Uses the course name-to-ID mapping to establish proper foreign key relationships.</li>
+													</ul>
+												</li>
+											</ul>
+										</li>
+										<li>Verification and Cleanup
+											<ul>
+												<li>The script demonstrates that the normalised structure works by executing a complex JOIN query that retrieves student names, course names, and scores across all three tables. Finally, it properly closes database connections and removes the temporary database file.
+												</li>
+											</ul>
+										</li>
+										<li>Key achievements
+											<ul>
+												<li>My implementation successfully:
+													<ul>
+														<li>Demonstrates each normalisation step with clear output showing data transformation.</li>
+														<li>Handles real-world data issues like empty cells and inconsistent formatting</li>
+														<li>Creates a working relational database with proper referential integrity</li>
+														<li>Validates the final structure through functional SQL queries</li>
+														<li>Follows good programming practices with proper resource management</li>
+													</ul>
+												</li>
+											</ul>
+										</li>
+									</ol>
+									<p>Overall, I feel my code effectively bridges the gap between theoretical normalisation concepts and practical database implementation, showing both the ‘why’ and ‘how’ of the normalisation process.</p>
+
+									<h5>Code:</h5>
+									<pre><code>#DDL.sql
+CREATE TABLE student (
+    number INTEGER PRIMARY KEY,
+    name TEXT,
+    date_birth TEXT,
+    support INT
+);
+CREATE TABLE course (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
+    board TEXT,
+    teacher TEXT
+);
+CREATE TABLE exam (
+    studentId INTEGER,
+    courseId INTEGER,
+    score INTEGER,
+
+    FOREIGN KEY(courseId) REFERENCES course(id),
+    FOREIGN KEY(studentId) REFERENCES student(number)
+);
+									</code></pre>
+									<pre><code># Load CSV
+from csv import DictReader as reader
+import os
+
+rows = []
+# UTF-8 & Ignore errors to remove special characters
+with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'table.csv'), encoding='utf-8', errors='ignore') as csvFile:
+    reader = reader(csvFile)
+    rows = [row for row in reader]
+    # Trim key names
+    rows = [{k.strip():v for k,v in row.items()} for row in rows]
+print('Source')
+[print(row) for row in rows]
+
+# Convert to 1NF (Atomic Rows)
+active_row = None
+for row in rows:
+    if (row.get('Student Number') != ''):
+        active_row = row
+        row['Student Number'] = int(row['Student Number'])
+        row['Exam Score'] = int(row['Exam Score'])
+        continue
+    elif (active_row is not None):
+        row['Student Number'] = int(active_row['Student Number'])
+        row['Student Name'] = active_row['Student Name']
+        row['Exam Score'] = None
+        row['Support'] = active_row['Support']
+        row['Date of Birth'] = active_row['Date of Birth']
+
+print('\n1NF')
+[print(row) for row in rows]
+
+# Convert to 2NF (Partial Dependencies)
+student_details = {}
+course_details = {}
+exam_results = {}
+for row in rows:
+    student_details[row['Student Number']] = {k:v for k,v in row.items() if k in ['Student Number', 'Student Name', 'Support', 'Date of Birth']}
+    course_details[row['Course Name']] = {k:v for k,v in row.items() if k in ['Course Name', 'Exam Boards', 'Teacher Name']}
+    exam_results[str(row['Student Number']) + row['Course Name']] = {k:v for k,v in row.items() if k in ['Student Number', 'Course Name', 'Exam Score']}
+student_details = [student for student in student_details.values()]
+course_details = [course for course in course_details.values()]
+exam_results = [result for result in exam_results.values()]
+
+print('\n2NF')
+[print(student) for student in student_details]
+print()
+[print(course) for course in course_details]
+print()
+[print(result) for result in exam_results]
+
+# Convert to 3NF (Transitive Dependencies)
+print('\n3NF (Not required)')
+print()
+
+# Load into DB
+import sqlite3
+con = sqlite3.connect('normalisation.db')
+cur = con.cursor()
+
+with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'DDL.sql')) as ddl:
+    cur.executescript(ddl.read())
+    ddl.close()
+
+# Load Courses
+print('Load to sqlite DB')
+courseNameIdMap = {}
+for course in course_details:
+    cur.execute('INSERT INTO course (name, board, teacher) VALUES (?,?,?)', (course['Course Name'], course['Exam Boards'], course['Teacher Name']))
+    courseNameIdMap[course['Course Name']] = cur.lastrowid
+print('Courses', courseNameIdMap)
+
+for student in student_details:
+    support_status = 1 if student['Support'] == 'Yes' else 0
+    cur.execute('INSERT INTO student (number, name, date_birth, support) VALUES (?,?,?,?)', (student['Student Number'], student['Student Name'], student['Date of Birth'], support_status))
+print('Loaded students')
+
+for result in exam_results:
+    courseId = courseNameIdMap[result['Course Name']]
+    cur.execute('INSERT INTO exam (studentId, courseId, score) VALUES (?,?,?)', (result['Student Number'], courseId, result['Exam Score']))
+print('Loaded exam results')
+print()
+
+# Example SQL query
+print('''SELECT 
+    student.name,
+    course.name,
+    exam.score 
+FROM exam as exam 
+INNER JOIN student AS student ON (
+    student.number = exam.studentId
+)
+INNER JOIN course AS course ON (
+    course.id = exam.courseId
+) : 
+''')
+res = cur.execute('''
+    SELECT 
+        student.name,
+        course.name,
+        exam.score 
+    FROM exam as exam 
+    INNER JOIN student AS student ON (
+        student.number = exam.studentId
+    )
+    INNER JOIN course AS course ON (
+        course.id = exam.courseId
+    )
+''')
+[print(r) for r in res]
+
+# Close Connections
+cur.close()
+con.close()
+
+# Clean up
+os.remove('normalisation.db')
+									</code></pre>
+									<pre><code>Student Number��,Student Name��,Exam Score��,Support��,Date of Birth��,Course Name �,Exam Boards��,Teacher Name��
+1001,Bob Baker,78,No,25/08/2001,Computer Science,BCS,Mr Jones
+,,,,,Maths,EdExcel,Ms Parker
+,,,,,Physics,OCR,Mr Peters
+1002,Sally Davies,55,Yes,02/10/1999,Maths,AQA,Ms Parker
+,,,,,Biology,WJEC,Mrs Patel
+,,,,,Music,AQA,Ms Daniels
+1003,Mark Hanmill,90,No,05/06/1995,Computer Science,BCS,Mr Jones
+,,,,,Maths,EdExcel,Ms Parker
+,,,,,Physics,OCR,Mr Peters
+1004,Anas Ali,70,No,03/08/1980,Maths,AQA,Ms Parker
+,,,,,Physics,OCR,Mr Peters
+,,,,,Biology,WJEC,Mrs Patel
+1005,Cheuk Yin,45,Yes,01/05/2002,Computer Science,BCS,Mr Jones
+,,,,,Maths,EdExcel,Ms Parker
+,,,,,Music,AQA,Ms Daniels
+</code></pre>
+								</div>
+							</section>
+
+					</div>
+
+				<!-- Contact -->
+					<!--<section id="contact">
+						<div class="inner">
+							<section>
+								<form method="post" action="#">
+									<div class="fields">
+										<div class="field half">
+											<label for="name">Name</label>
+											<input type="text" name="name" id="name" />
+										</div>
+										<div class="field half">
+											<label for="email">Email</label>
+											<input type="text" name="email" id="email" />
+										</div>
+										<div class="field">
+											<label for="message">Message</label>
+											<textarea name="message" id="message" rows="6"></textarea>
+										</div>
+									</div>
+									<ul class="actions">
+										<li><input type="submit" value="Send Message" class="primary" /></li>
+										<li><input type="reset" value="Clear" /></li>
+									</ul>
+								</form>
+							</section>
+							<section class="split">
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-envelope"></span>
+										<h3>Email</h3>
+										<a href="#">information@untitled.tld</a>
+									</div>
+								</section>
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-phone"></span>
+										<h3>Phone</h3>
+										<span>(000) 000-0000 x12387</span>
+									</div>
+								</section>
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-home"></span>
+										<h3>Address</h3>
+										<span>1234 Somewhere Road #5432<br />
+										Nashville, TN 00000<br />
+										United States of America</span>
+									</div>
+								</section>
+							</section>
+						</div>
+					</section>-->
+
+				<!-- Footer -->
+				<footer id="footer">
+					<div class="inner">
+						<ul class="icons">
+							<!--<li><a href="#" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
+							<li><a href="#" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
+							<li><a href="#" class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>-->
+							<li><a href="#" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+							<!--<li><a href="#" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>-->
+						</ul>
+						<ul class="copyright">
+							<li>&copy; Rebecca Jones</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li>
+						</ul>
+					</div>
+				</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="../../assets/js/jquery.min.js"></script>
+			<script src="../../assets/js/jquery.scrolly.min.js"></script>
+			<script src="../../assets/js/jquery.scrollex.min.js"></script>
+			<script src="../../assets/js/browser.min.js"></script>
+			<script src="../../assets/js/breakpoints.min.js"></script>
+			<script src="../../assets/js/util.js"></script>
+			<script src="../../assets/js/main.js"></script>
+
+	</body>
+</html>

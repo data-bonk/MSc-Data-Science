@@ -1,0 +1,198 @@
+<!DOCTYPE HTML>
+<!--
+	Forty by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>B. Jones Portfolio</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../../../assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="../../../assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="../../../index.html" class="logo"><strong>B. Jones</strong> <span>e-Portfolio</span></a>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<ul class="links">
+							<li><a href="../../../index.html">Home</a></li>
+							<li><a href="./module.html">Module</a></li>
+						</ul>
+						<ul class="actions stacked">
+							<!--
+							<li><a href="#" class="button primary fit">Get Started</a></li>
+							<li><a href="#" class="button fit">Log In</a></li>
+							-->
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main" class="alt">
+
+						<!-- One -->
+							<section id="one">
+								<div class="inner">
+									<header class="major">
+										<h1>SQLite</h1>
+									</header>
+									<p>In preparation for the seminar, we were asked to complete an example involving storing data in a relational database, using the data from the Unit 4 Lecturecast activities.
+									</p><p>The script I produced demonstrated a complete SQLite workflow for analysing the cleaned UNICEF survey data from the unit 4 processing pipeline.
+									Here’s how it works:</p>
+									<ol>
+										<li>Database creation and data loading
+											<ul>
+												<li>The script establishes a connection to a SQLite database called ‘unicef.db’ (creating it if it doesn’t exist). It then reads the cleaned CSV file (‘mn_swapped_headers.csv’). This is the output from my header replacement script. It then loads it directly into the database using pandas’ to_sql() method.</li>
+											</ul>
+										</li>
+										<li>Key parameters in data loading:
+											<ul>
+												<li>‘if_exists=’append’’: adds data to the table if it already exists, rather than overwriting.</li>
+												<li>‘index=True’: Includes the pandas DataFrame index as a column in the database table.</li>
+											</ul>
+										</li>
+										<li>Query execution
+											<ul>
+												<li>The script creates a cursor object to execute SQL commands and performs a sample analytical query. It groups the survey respondents by religion and counts the frequency of each religious affiliation using 'GROUP ’Y' and ‘COUNT()’ functions. This demonstrated how the descriptive column headers from my cleaning process make the data immediately queryable with meaningful field names.
+</li>
+											</ul>
+										</li>
+										<li>Resource Management
+											<ul>
+												<li>My script follows good database practices by properly closing both the cursor and connection objects after use. Additionally, it includes a cleanup step that removes the temporary database file using the ‘os.remove()’ function, which helps test scenarios or when persistent storage is not needed.
+</li>
+											</ul>
+										</li>
+										<li>Workflow integration
+											<ul>
+												<li>My script effectively completes the data processing pipeline by transforming the human-readable survey data into a format suitable for SQL-based analysis. The combination of pandas for data manipulation and SQLite for querying provides a powerful toolkit for exploring survey patterns and relationships within the UNICEF dataset.
+								</li>
+											</ul>
+										</li>
+									</ol>
+
+									<h5>Code</h5>
+									<pre><code>import sqlite3
+import pandas as pd
+import os
+
+# connect/create CB
+con = sqlite3.connect('unicef.db')
+
+# Read CSV
+df = pd.read_csv('mn_swapped_headers.csv')
+# Convert to SQL query
+sql = df.to_sql('unicef', con, if_exists='append', index=True)
+
+# Define cursor
+cur = con.cursor()
+
+# Simple Query + Output
+res = cur.execute('SELECT religion, COUNT(0) FROM unicef GROUP BY religion')
+print([r for r in res])
+
+# Close connection
+cur.close()
+con.close()
+
+# Remove Database
+os.remove('unicef.db')</code></pre>
+									</div>
+							</section>
+
+					</div>
+
+				<!-- Contact -->
+					<!--<section id="contact">
+						<div class="inner">
+							<section>
+								<form method="post" action="#">
+									<div class="fields">
+										<div class="field half">
+											<label for="name">Name</label>
+											<input type="text" name="name" id="name" />
+										</div>
+										<div class="field half">
+											<label for="email">Email</label>
+											<input type="text" name="email" id="email" />
+										</div>
+										<div class="field">
+											<label for="message">Message</label>
+											<textarea name="message" id="message" rows="6"></textarea>
+										</div>
+									</div>
+									<ul class="actions">
+										<li><input type="submit" value="Send Message" class="primary" /></li>
+										<li><input type="reset" value="Clear" /></li>
+									</ul>
+								</form>
+							</section>
+							<section class="split">
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-envelope"></span>
+										<h3>Email</h3>
+										<a href="#">information@untitled.tld</a>
+									</div>
+								</section>
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-phone"></span>
+										<h3>Phone</h3>
+										<span>(000) 000-0000 x12387</span>
+									</div>
+								</section>
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-home"></span>
+										<h3>Address</h3>
+										<span>1234 Somewhere Road #5432<br />
+										Nashville, TN 00000<br />
+										United States of America</span>
+									</div>
+								</section>
+							</section>
+						</div>
+					</section>-->
+
+				<!-- Footer -->
+				<footer id="footer">
+					<div class="inner">
+						<ul class="icons">
+							<!--<li><a href="#" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
+							<li><a href="#" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
+							<li><a href="#" class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>-->
+							<li><a href="#" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+							<!--<li><a href="#" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>-->
+						</ul>
+						<ul class="copyright">
+							<li>&copy; Rebecca Jones</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li>
+						</ul>
+					</div>
+				</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="../../assets/js/jquery.min.js"></script>
+			<script src="../../assets/js/jquery.scrolly.min.js"></script>
+			<script src="../../assets/js/jquery.scrollex.min.js"></script>
+			<script src="../../assets/js/browser.min.js"></script>
+			<script src="../../assets/js/breakpoints.min.js"></script>
+			<script src="../../assets/js/util.js"></script>
+			<script src="../../assets/js/main.js"></script>
+
+	</body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE HTML>
+<!--
+	Forty by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>B. Jones Portfolio</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../../../assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="../../../assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="../../../index.html" class="logo"><strong>B. Jones</strong> <span>e-Portfolio</span></a>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<ul class="links">
+							<li><a href="../../../index.html">Home</a></li>
+							<li><a href="./module.html">Module</a></li>
+						</ul>
+						<ul class="actions stacked">
+							<!--
+							<li><a href="#" class="button primary fit">Get Started</a></li>
+							<li><a href="#" class="button fit">Log In</a></li>
+							-->
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main" class="alt">
+
+						<!-- One -->
+							<section id="one">
+								<div class="inner">
+									<header class="major">
+										<h1>Data Cleaning</h1>
+									</header>
+									<p>For unit 4, we were expected to attempt some of the activities from the Lecturecast, with the goal of understanding the fundamentals of data cleaning, compile and document Python scripts, and compile data sets and convert data into different formats. The exercises were taken from the "Data Wrangling with Python" textbook. I will walk through the process I took below with UNICEF survey data.
+									</p>
+									<ol>
+										<li>
+											1st script: SPSS to CSV Conversion (‘1_csv_convert.py’)
+											<ul>
+												<li>This script handles the initial data format conversion from SPSS files to CSV format. It processes nine different SPSS files (with ‘.sav’ extensions) representing various survey categories. These are potentially different demographic groups or survey modules, based on how they are named (e.g., bh, ch, fs, hh, etc.). </li>
+												<li>This script leverages pandas’ built-in ‘read_spss()’ function, which is specifically designed to handle SPSS Statistical Package files. This function can directly parse the complex binary format of SPSS files, including variable labels, value labels, and metadata, converting them into a pandas DataFrame. This eliminated the need for external SPSS software or complex parsing libraries. </li>
+												<li>This script systematically processes each file by reading the SPSS data and then saving it as a CSV file in the same directory, using the same filename but with a different extension.</li>
+											</ul>
+										</li>
+										<li>
+											2nd script: Header Metadata Scraping (‘2_scrape_headers.py’)
+											<ul>
+												<li>This script addresses the common challenge of cryptic variable names in survey data. It scrapes the World Bank’s microdata documentation website to extract meaningful variable descriptions.</li>
+												<li>The script targets specific CSS selectors to extract parallel lists:
+													<ul>
+														<li>Original abbreviated headers (variable code)</li>
+														<li>Human-readable text descriptions</li>
+													</ul>
+												</li>
+												<li>Using BeautifulSoup, it captures these paired elements and creates a mapping dictionary. The data is then exported to a CSV file (‘mn_headers.csv’) that serves as a lookup table for translating coded variable names into meaningful descriptions.</li>
+											</ul>
+										</li>
+										<li>
+											3rd script: Header Replacement (‘3_compile.py’)
+											<ul>
+												<li>This final script performs the actual data cleaning by replacing cryptic column headers with descriptive ones. It reads both the converted survey data (‘mn.csv’) and the header mapping file (‘mn_headers.csv’).</li>
+												<li>
+													Processing logic: For each row in the dataset, the script iterated through the header mappings and systematically:
+													<ul>
+														<li>Checks if the original coded header exists in the data</li>
+														<li>Created a new column with the descriptive text as the header name</li>
+														<li>Copies the data from the original column</li>
+														<li>Removes the original cryptic column</li>
+													</ul>
+												</li>
+												<li>The result is a cleaned dataset (‘mn_swapped_headers.csv’) with human-readable column names, making the survey data much more accessible for analysis.</li>
+											</ul>
+										</li>
+									
+</ol>
+									<h5>Pipeline benefits</h5>
+									<p>This three-step approach transforms the raw UNICEF survey data from an expert-only format (SPSS with coded variables) into analyst-friendly CSV files with descriptive column names. The pandas SPSS integration makes this process particularly efficient by handling the complex SPSS format conversion without requiring specialised statistical software.
+									</p></div>
+
+									<h5>Code</h5>
+									<h6>1_csv_convert.py</h6>
+									<pre><code>
+import pandas as pd
+import os
+
+data_files = [
+	'data/bh.sav',
+	'data/ch.sav',
+	'data/fs.sav',
+	'data/hh.sav',
+	'data/hl.sav',
+	'data/mm.sav',
+	'data/mn.sav',
+	'data/tn.sav',
+	'data/wm.sav',
+]
+
+
+for file in data_files:
+	df = pd.read_spss(os.path.join(os.path.dirname(os.path.abspath(__file__)), file))
+	destination = file.replace('.sav', '.csv')
+	df.to_csv(os.path.join(os.path.dirname(os.path.abspath(__file__)), destination), index=False)
+									</code></pre>
+									<h6>2_scrape_headers.py</h6>
+									<pre><code>
+import requests
+import csv
+from bs4 import BeautifulSoup
+target_url = 'https://microdata.worldbank.org/index.php/catalog/4286/data-dictionary/F10?file_name=mn'
+
+# Make GET request to page, grab content, store in page_contents
+page_contents = requests.get(target_url).content
+
+# Initialise beautiful soup with the contents
+soup = BeautifulSoup(page_contents, features="html.parser")
+
+# Selector on page contents to find content
+headerElements = soup.select('.row.var-row > .col-md-3 a')
+textElements = soup.select('.row.var-row > .col a')
+
+original_headers = [a.get_text().strip() for a in headerElements]
+text_headers = [a.get_text().strip() for a in textElements]
+
+compiled_dict = [{ 'header': h, 'text': t } for h,t in zip(original_headers, text_headers)]
+
+with open('mn_headers.csv', 'w', newline = '') as csvFile:
+    writer = csv.DictWriter(csvFile, delimiter=',', quotechar='"', fieldnames=['header', 'text'])
+    writer.writeheader()
+    writer.writerows(compiled_dict)
+    csvFile.close()
+									</code></pre>
+									<h6>3_compile.py</h6>
+									<pre><code>
+from csv import DictReader as reader, DictWriter
+import os
+
+data = reader(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data/mn.csv')))
+headers = reader(open('mn_headers.csv'))
+
+headers = [h for h in headers]
+data = [d for d in data]
+
+switched_headers = []
+for row in data:
+    for header in headers:
+        if header.get('header') not in row:
+            continue
+        row[header.get('text')] = row[header.get('header')]
+        del row[header.get('header')]
+    switched_headers.append(row)
+
+with open('mn_swapped_headers.csv', 'w', newline = '') as csvFile:
+    writer = DictWriter(csvFile, delimiter=',', quotechar='"', fieldnames=switched_headers[0].keys())
+    writer.writeheader()
+    writer.writerows(switched_headers)
+    csvFile.close()
+									</code></pre>
+							</section>
+
+					</div>
+
+				<!-- Contact -->
+					<!--<section id="contact">
+						<div class="inner">
+							<section>
+								<form method="post" action="#">
+									<div class="fields">
+										<div class="field half">
+											<label for="name">Name</label>
+											<input type="text" name="name" id="name" />
+										</div>
+										<div class="field half">
+											<label for="email">Email</label>
+											<input type="text" name="email" id="email" />
+										</div>
+										<div class="field">
+											<label for="message">Message</label>
+											<textarea name="message" id="message" rows="6"></textarea>
+										</div>
+									</div>
+									<ul class="actions">
+										<li><input type="submit" value="Send Message" class="primary" /></li>
+										<li><input type="reset" value="Clear" /></li>
+									</ul>
+								</form>
+							</section>
+							<section class="split">
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-envelope"></span>
+										<h3>Email</h3>
+										<a href="#">information@untitled.tld</a>
+									</div>
+								</section>
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-phone"></span>
+										<h3>Phone</h3>
+										<span>(000) 000-0000 x12387</span>
+									</div>
+								</section>
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-home"></span>
+										<h3>Address</h3>
+										<span>1234 Somewhere Road #5432<br />
+										Nashville, TN 00000<br />
+										United States of America</span>
+									</div>
+								</section>
+							</section>
+						</div>
+					</section>-->
+
+				<!-- Footer -->
+				<footer id="footer">
+					<div class="inner">
+						<ul class="icons">
+							<!--<li><a href="#" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
+							<li><a href="#" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
+							<li><a href="#" class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>-->
+							<li><a href="#" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+							<!--<li><a href="#" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>-->
+						</ul>
+						<ul class="copyright">
+							<li>&copy; Rebecca Jones</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li>
+						</ul>
+					</div>
+				</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="../../assets/js/jquery.min.js"></script>
+			<script src="../../assets/js/jquery.scrolly.min.js"></script>
+			<script src="../../assets/js/jquery.scrollex.min.js"></script>
+			<script src="../../assets/js/browser.min.js"></script>
+			<script src="../../assets/js/breakpoints.min.js"></script>
+			<script src="../../assets/js/util.js"></script>
+			<script src="../../assets/js/main.js"></script>
+
+	</body>
+</html>
